@@ -1,5 +1,5 @@
 # Text File Data Storage Lambda Function
-This folder contains the AWS Greeengrass Lambda function for data storage that can be deployed the Greengrass core running on the Laird Sentrius&trade; IG60.
+This folder contains the AWS Greeengrass Lambda function for data storage that can be deployed the Greengrass core running on the Sentrius&trade; IG60.
 
 ### TextFileStorageLambda.py
 This Lambda function receives Modbus messages (in the form as JSON) and writes all messages received to a CSV-delimited text file.

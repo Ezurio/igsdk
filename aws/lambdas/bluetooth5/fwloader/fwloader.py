@@ -10,7 +10,7 @@
 # Use the following procedure to load firmware to your Gateway:
 #
 # 1. Generate a BL654 bootloader-compatible firmware update package (.UWF) for the
-#    BL654 co-processor. (Contact Laird Connectivity support for details.)
+#    BL654 co-processor. (Contact support for details.)
 #
 # 2. Create a ZIP file containing this file, the "greengrasssdk" folder
 #    (v1.4 or later), and a single firmware update image (.UWF).

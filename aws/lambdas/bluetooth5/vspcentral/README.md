@@ -15,11 +15,11 @@ The following are some key concepts and definitions of terms used throughout thi
 
 **JSON**: JSON is an data object serialization method that encodes objects into strings and conversely decodes strings into object data.  In this demonstration, all the data and control messages passed over the VSP connection are encoded as JSON.
 
-**smartBASIC**: Laird's Sentrius IG60 with Bluetooth 5, and the BL654 USB dongle both support Laird's smartBASIC programming language.  Refer to the [BL654 product page](https://www.lairdconnect.com/wireless-modules/bluetooth-modules/bluetooth-5-modules/bl654-series-bluetooth-module-nfc) for more details and support information regarding smartBASIC.
+**smartBASIC**: Sentrius IG60 with Bluetooth 5, and the BL654 USB dongle both support the smartBASIC programming language.  Refer to the [BL654 product page](https://www.lairdconnect.com/wireless-modules/bluetooth-modules/bluetooth-5-modules/bl654-series-bluetooth-module-nfc) for more details and support information regarding smartBASIC.
 
 ### Component Overview
 
-#### Laird BL654 USB Dongle + VSP Peripheral Role smartBASIC Application
+#### BL654 USB Dongle + VSP Peripheral Role smartBASIC Application
 The VSP Peripheral Role smartBASIC application `peripheral.sb` runs on the external BL654 USB dongle.  This application acts as the BLE GATT peripheral role, and accepts incoming connections.  Once connected, this application forwards messages in both directions between the USB serial port on the development PC and the BLE central device (the Sentrius IG60).
 
 #### VSP Peripheral Test Script
@@ -34,30 +34,30 @@ The VSP central Lambda function `vsp_central.py` performs the core functions of 
 ### Supporting Documentation
 You may wish to refer to the following additional documentation for details that are omitted here:
 
-[Laird Sentrius IG60 Online Documentation](http://documentation.lairdconnect.com/Builds/IG60-GREENGRASS/latest/Content/Home.htm)
+[Sentrius IG60 Online Documentation](http://documentation.lairdconnect.com/Builds/IG60-GREENGRASS/latest/Content/Home.htm)
 
 [AWS IoT Greengrass Developer Guide](https://docs.aws.amazon.com/greengrass/latest/developerguide/what-is-gg.html)
 
-[Laird BL654 Documentation](https://www.lairdconnect.com/wireless-modules/bluetooth-modules/bluetooth-5-modules/bl654-series-bluetooth-module-nfc#documentation)
+[BL654 Documentation](https://www.lairdconnect.com/wireless-modules/bluetooth-modules/bluetooth-5-modules/bl654-series-bluetooth-module-nfc#documentation)
 
-[Laird UwTerminalX Setup and Installation Guide](https://github.com/LairdCP/UwTerminalX) on Github
+[UwTerminalX Setup and Installation Guide](https://github.com/LairdCP/UwTerminalX) on Github
 
 ## Running the VSP Sensor Demo
 
 ### Pre-Requisites
 
 In order to run this demo, you must have the following:
-* A Laird Sentrius IG60 with Bluetooth 5
-* A Laird BL654 USB dongle (*NOTE:* This dongle is **NOT** included with the Sentrius IG60 and must be obtained separately)
+* A Sentrius IG60 with Bluetooth 5
+* A BL654 USB dongle (*NOTE:* This dongle is **NOT** included with the Sentrius IG60 and must be obtained separately)
 * A mobile phone running iOS 8.0 or later, or Android 7.0 or later, and the free Sentrius IG Connect application available in the Apple App Store or Google Play
 * A development PC running Windows, with the following installed:
   * [UwTerminalX](https://github.com/LairdCP/UwTerminalX)
   * Python 3.7 or later
   * pySerial 3.3 or later
-  * The smartBASIC XCompiler for the Sentrius IG60 Bluetooth 5 co-processor (contact Laird Connectivity support for more details), e.g., `XComp_BL654_A231_7D41.exe`
+  * The smartBASIC XCompiler for the Sentrius IG60 Bluetooth 5 co-processor (contact support for more details), e.g., `XComp_BL654_A231_7D41.exe`
 * An AWS account with permissions to create and manage Lambdas functions and Greengrass groups
 
-### Install and Provision the Laird Sentrius IG60 with Bluetooth 5
+### Install and Provision the Sentrius IG60 with Bluetooth 5
 Refer to the Sentrius IG60 online documentation for details on how to [connect the IG60 to your AWS account](http://documentation.lairdconnect.com/Builds/IG60-GREENGRASS/latest/Content/Topics/5%20-%20Using%20the%20Device/Greengrass%20Getting%20Started/Introduction.htm).  Once you have completed this step, verify that your Sentrius IG60 is online (via the status LEDs) and available via the AWS IoT Greengrass console.
 
 ### Build and deploy the VSP peripheral application (simulated sensor)
@@ -148,3 +148,4 @@ Refer to the Sentrius IG60 online documentation for details on how to [connect t
     You should see an indication from the test script that the reporting period was changed:
 
         INFO:__main__:Changing message period to 10
+

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2021 Laird Connectivity
+# Copyright (c) 2024 Ezurio LLC.
 #
 # IG60 helper script for remotely configuring Wi-Fi connections via EdgeIQ. This
 # script is essentially a wrapper around NetworkManager's command line tool (nmcli)

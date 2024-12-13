@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 #
-# Copyright 2021 Laird Connectivity
+# Copyright (c) 2024 Ezurio LLC.
 #
 # IG60 helper script for remotely configuring the LTE APN via EdgeIQ.
 #
@@ -117,3 +117,4 @@ if __name__ == "__main__":
         except:
             failure('Failed to reset APN settings.')
     sys.exit(0)
+

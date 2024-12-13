@@ -1,12 +1,12 @@
 # AWS Support for Sentrius&trade; IG60
-This folder contains support for Amazon Web Services (AWS) for Laird's Sentrius&trade; IG60.
+This folder contains support for Amazon Web Services (AWS) for the Sentrius&trade; IG60.
 
 ## Contents
 `lambdas` - Contains pre-configured Lambda functions for AWS Greengrass
 
 ## General Requirements
 All of the pre-configured Greengrass Lambda functions have the following requirements:
-* **Greengrass Core**: A Laird Sentrius&trade; IG60 supporting AWS Greengrass
+* **Greengrass Core**: A Sentrius&trade; IG60 supporting AWS Greengrass
 * **AWS Account**: An AWS account that can deploy the following AWS services:
   * Amazon S3
   * Amazon CloudFront

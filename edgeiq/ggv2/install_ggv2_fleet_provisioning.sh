@@ -266,7 +266,7 @@ then
     exit 1
 fi
 
-SDCARD_ROOT="/var/media/mmcblk0p1"
+SDCARD_ROOT="/media/mmcblk0p1"
 
 # Pull in the configuration file via 'source'. We are expecting the following
 # settings to be present in the configuration file:

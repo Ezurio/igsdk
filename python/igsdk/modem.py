@@ -1,7 +1,7 @@
 #
 # modem.py
 #
-# Modem API for Laird Sentrius IG60 devices
+# Modem API for Sentrius IG60 devices
 #
 import dbus
 import dbus.exceptions

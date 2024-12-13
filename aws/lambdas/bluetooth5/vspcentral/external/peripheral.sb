@@ -1,5 +1,5 @@
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Copyright (c) 2019, Laird Connectivity                                     ++
+// Copyright (c) 2024, Ezurio LLC.                                            ++
 //                                                                            ++
 // Permission to use, copy, modify, and/or distribute this software for any   ++
 // purpose with or without fee is hereby granted, provided that the above     ++
@@ -17,7 +17,7 @@
 //                                                                            ++
 //******************************************************************************
 //
-// This app simulates a device running as a sensor on a Laird Connectivity BL654
+// This app simulates a device running as a sensor on a BL654
 // module, in a peripheral role using BLE GATT to communicate over a virtual
 // serial port connection to the Sentrius IG60 with Bluetooth 5.
 //
@@ -104,7 +104,7 @@ FUNCTION BleStartAdverts()
     nMaxConnInterval = 7700
 
     // Register GAP service with device name and connection intervals
-    dim DevName$ : DevName$ = "LAIRD_BL654"
+    dim DevName$ : DevName$ = "EZURIO_BL654"
     rc = BleGapSvcInit(DevName$, 0, 0, nMinConnInterval, nMaxConnInterval, 4000000,  0)
 
     // Start Ble adverts

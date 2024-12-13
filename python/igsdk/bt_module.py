@@ -1,7 +1,7 @@
 #
 # bt_module.py
 #
-# Bluetooth API for Laird Sentrius IG devices
+# Bluetooth API for Sentrius IG devices
 #
 
 import dbus
@@ -751,3 +751,4 @@ def bt_config_characteristic_notification(bt, address, service_uuid, char_uuid, 
     """
     if bt:
         bt.configure_characteristic_notification(address, service_uuid, char_uuid, enable)
+

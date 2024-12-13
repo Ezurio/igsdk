@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2022 Laird Connectivity
+# Copyright (c) 2024 Ezurio LLC.
 #
 # IG60 helper script for updating the OpenJDK dependency components to support
 # GGv2 which are stored on the SD card
@@ -36,7 +36,7 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
-SDCARD_ROOT="/var/media/mmcblk0p1"
+SDCARD_ROOT="/media/mmcblk0p1"
 
 # Link in the FS key
 keyctl link @us @s

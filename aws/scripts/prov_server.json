@@ -149,7 +149,7 @@
                     }],
                     "Enabled" : "true",
                     "DefaultCacheBehavior" : {
-                        "AllowedMethods" : [ "GET", "HEAD" ],  
+                        "AllowedMethods" : [ "GET", "HEAD" ],
                         "TargetOriginId" : "theS3Origin",
                         "ForwardedValues" : {
                             "QueryString" : "false",
@@ -164,7 +164,7 @@
                         ]
                     },
                    "PriceClass" : "PriceClass_100",
-                   "ViewerCertificate" : { "CloudFrontDefaultCertificate" : "true" }  
+                   "ViewerCertificate" : { "CloudFrontDefaultCertificate" : "true" }
                 }
             }
         }

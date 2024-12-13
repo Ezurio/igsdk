@@ -3,16 +3,35 @@
 # IG60 Update Script for EdgeIQ
 #
 
+UPDATEFILE=$1
+
+# Check the current firmware release level (LRD7 or LRD11)
+LRD=`cat /etc/os-release | grep VERSION_ID | cut -f 2 -d"=" | cut -f 1 -d"."`
+echo "LRD is $LRD"
+if [ "$LRD" == "11" ]; then
+	echo "Updating from LRD11"
+	fw_update ./$UPDATEFILE > output.txt 2>&1
+	grep 'failed' output.txt > /dev/null
+	# if "failed" is NOT found, err level 1 is set - thus, we are LRD11 -> LRD11
+	if [ $? -eq 1 ]; then
+		# No sign of "failed" in output.txt - we should be done
+        echo "Successfully upgrade from LRD11"
+        exit 0
+	else
+        # this means something bad happened...
+        echo "Error when upgrading from LRD11"
+        exit 1
+	fi
+fi
+
+echo "Updating from LRD7"
 # Make verbose log, fail on uncaught errors
 set -xe
-
 FSCRYPT_KEY=ffffffffffffffff
 MOUNT_POINT=/var/migrate
 DATA_SECRET=${MOUNT_POINT}/secret
 DATA_PUBLIC=${MOUNT_POINT}/public
 KEYFILE=/etc/ssl/misc/dev.crt
-
-UPDATEFILE=$1
 
 cleanup_and_fail(){
     echo "$1"
@@ -77,3 +96,4 @@ fw_setenv bootside "${UPDATESIDE}" || cleanup_and_fail "Cannot set bootside"
 rm -f "${UPDATEFILE}"
 
 exit 0
+

@@ -1,5 +1,5 @@
-# Laird Connectivity IG60 EdgeIQ Support
-This folder contains various utilities for supporting the EdgeIQ Device Management service on the Laird Connectivity Sentrius&trade; IG60.
+# Sentrius IG60 EdgeIQ Support
+This folder contains various utilities for supporting the EdgeIQ Device Management service on the Sentrius&trade; IG60.
 
 ## Firmware Update
 The script `ig60_update.sh` is used to perform a firmware update operation via the EdgeIQ cloud:

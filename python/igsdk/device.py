@@ -1,7 +1,7 @@
 #
 # device.py
 #
-# Device API for Laird Sentrius IG devices
+# Device API for Sentrius IG devices
 #
 
 import dbus

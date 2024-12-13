@@ -1,7 +1,7 @@
 #
 # config.py
 #
-# Config API for Laird Sentrius IG devices
+# Config API for Sentrius IG devices
 #
 
 import dbus

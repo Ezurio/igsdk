@@ -19,7 +19,7 @@ set -e
 # - writeable temporary location
 WRITEABLE_TMP_LOCATION="/tmp"
 # - location for config files
-EDGE_PARENT_DIR="/opt"
+EDGE_PARENT_DIR="/gg"
 # (- architecture?)
 
 
@@ -50,13 +50,10 @@ echo "$INFO using tmp folder $WRITEABLE_TMP_LOCATION."
 # Set edge location
 EDGE_LOCATION="$EDGE_PARENT_DIR/edge"
 
-# Laird specifics
+# IG60 specifics
 # - architecture armv7 (thumb) - assume edge arm7 / edgectl armhf
 # - kernel 4.19, bash, curl, wget available
-# - Edge is installed "manually" (not via edgectl, but using the steps described in your documentation for manual installation)
 # - There is a systemd unit file present on the device (in place before edge is installed).
-#   - assume systemctl start edge works ?
-# - custom location /gg/edge (writable)
 # 
 
 printf "\n==== CHECKING IF CONDITIONS FOR UPDATE ARE MET ====\n\n"
@@ -79,16 +76,12 @@ else
     printf "$PASSED found bootstrap.json.\n"
 fi
 
-# test if systemd is set up in bootstrap.json
-printf "$TEST check if bootstrap.json is configured to use systemd\n"
-
-BOOTSTRAP_CHECK_SYSTEMD="$(cat $BOOTSTRAP_FILE | grep systemd)" || ( printf "$ERROR edge is not configured to use systemd, cannot proceed.\n"; exit 1 )
-if [ -z "$BOOTSTRAP_CHECK_SYSTEMD" ]
+# Extract company identifier from bootstrap.conf
+COMPANY_ID="$(cat /gg/edge/conf/bootstrap.json | tr -d ' ,"' | grep company_id | awk -F':' ' {print $2}')"
+if [ -z "$COMPANY_ID" ]
 then
-    printf "$ERROR edge is not configured to use systemd, cannot proceed.\n"
+    printf "$ERROR cannot find company id, cannot proceed.\n"
     exit 1;
-else
-    printf "$PASSED bootstrap.json is configured to use systemd.\n"
 fi
 
 # test if conf.json is at the default location
@@ -120,74 +113,9 @@ fi
 # test if staging or production url is set up in conf.json
 printf "$TEST check which environment conf.json is configured to use.\n"
 
-ENV_DETECTED=""
-PLATFORM_URL=""
-
-# check for staging
-ENV_CHECK="$(cat $CONF_FILE | grep $STAGING_URL_NEW)" || echo "$INFO edge is not configured to use staging."
-if [ -z "$ENV_CHECK" ]
-then
-    printf "$INFO edge is not configured to use staging.\n"
-else
-    printf "$PASSED conf.json is configured to use staging.\n"
-    ENV_DETECTED="staging"
-    PLATFORM_URL="$STAGING_URL_NEW"
-fi
-
-# check for prod
-ENV_CHECK="$(cat $CONF_FILE | grep $PROD_URL_NEW)" || echo "$INFO edge is not configured to use production."
-if [ -z "$ENV_CHECK" ]
-then
-    printf "$INFO edge is not configured to use production.\n"
-else
-    printf "$PASSED conf.json is configured to use production.\n"
-    ENV_DETECTED="prod"
-    PLATFORM_URL="$PROD_URL_NEW"
-fi
-
-# check for old staging
-ENV_CHECK="$(cat $CONF_FILE | grep $STAGING_URL)" || echo "$INFO edge is not configured to use staging."
-if [ -z "$ENV_CHECK" ]
-then
-    printf "$INFO edge is not configured to use staging.\n"
-else
-    printf "$PASSED conf.json is configured to use staging.\n"
-    ENV_DETECTED="staging"
-    PLATFORM_URL="$STAGING_URL_NEW"
-fi
-
-# check for old prod
-ENV_CHECK="$(cat $CONF_FILE | grep $PROD_URL)" || echo "$INFO edge is not configured to use production."
-if [ -z "$ENV_CHECK" ]
-then
-    printf "$INFO edge is not configured to use production.\n"
-else
-    printf "$PASSED conf.json is configured to use production.\n"
-    ENV_DETECTED="prod"
-    PLATFORM_URL="$PROD_URL_NEW"
-fi
-
-# test if env is set up correctly
-printf "$TEST check if environment was detected.\n"
-
-if [ -z $ENV_DETECTED ]
-then
-    printf "$ERROR environment was not detected, cannot proceed.\n"
-    exit 1;
-else
-    printf "$PASSED environment was detected: $ENV_DETECTED.\n"
-fi
-
-# test if platform URL is set up correctly
-printf "$TEST check if platform url was detected.\n"
-
-if [ -z $PLATFORM_URL ]
-then
-    printf "$ERROR platform URL was not detected, cannot proceed.\n"
-    exit 1;
-else
-    printf "$PASSED platform URL was detected: $PLATFORM_URL.\n"
-fi
+# Always use production
+ENV_DETECTED="prod"
+PLATFORM_URL="$PROD_URL_NEW"
 
 # test if systemd is set up correctly
 printf "$TEST check if systemd unit file exists\n"
@@ -246,53 +174,34 @@ fi
 printf "$TEST check if edgectl is executable.\n"
 $EDGECTL_COMMAND version || ( echo "$ERROR cannot execute edgectl."; exit 1 )
 
+# Create install script
+EDGE_INSTALL_SCRIPT=${WRITEABLE_TMP_LOCATION}/edge_install.sh
+rm -rf ${EDGE_INSTALL_SCRIPT}
+cat > ${EDGE_INSTALL_SCRIPT} << EOF
+#!/bin/sh
+
+cp ${EDGE_PARENT_DIR}/edge/init/systemd/edge.service ${WRITEABLE_TMP_LOCATION}/edge.service
+systemctl stop edge || true
+rm -rf ${EDGE_PARENT_DIR}/edge.old
+mv ${EDGE_PARENT_DIR}/edge ${EDGE_PARENT_DIR}/edge.old
+${EDGECTL_COMMAND} install -p laird -d ${EDGE_PARENT_DIR} -t -c ${COMPANY_ID} || (echo "$ERROR Install failed, restoring old version." ; rm -rf ${EDGE_PARENT_DIR}/edge ; mv ${EDGE_PARENT_DIR}/edge.old ${EDGE_PARENT_DIR}/edge )
+cp ${WRITEABLE_TMP_LOCATION}/edge.service ${EDGE_PARENT_DIR}/edge/init/systemd/edge.service
+systemctl start edge
+rm -rf ${EDGE_PARENT_DIR}/edge.old
+EOF
+
+# set update script executable
+chmod +x ${EDGE_INSTALL_SCRIPT} || ( echo "$ERROR while making update script executable."; exit 1 )
+
+printf "Update script contents:"
+cat ${EDGE_INSTALL_SCRIPT}
 
 printf "\n==== PROCEEDING WITH UPDATE ====\n\n"
 
-# modify bootstrap.json to set version to latest
-BOOTSTRAP_FILE_TMP="$WRITEABLE_TMP_LOCATION/bootstrap.json"
+EDGECTL_LOG="$WRITEABLE_TMP_LOCATION/edgectl_install.log"
 
-echo "COPYING bootstrap.json to $BOOTSTRAP_FILE_TMP"
-cp $BOOTSTRAP_FILE $BOOTSTRAP_FILE_TMP
-
-echo "PRINTING bootstrap.json before changes"
-cat $BOOTSTRAP_FILE_TMP
-
-echo "Replacing version with latest"
-sed -i '/version/c\   \"version\" : \"latest\"' $BOOTSTRAP_FILE_TMP
-
-echo "Inserting install_dir into bootstrap.json if it doesn't exist"
-BOOTSTRAP_CHECK_INSTALL_DIR="$(cat $BOOTSTRAP_FILE | grep install_dir)" || echo "$INFO install_dir is not set in bootstrap.json."
-if [ -z "$BOOTSTRAP_CHECK_INSTALL_DIR" ]
-then
-    sed -i "4i\  \"install_dir\":\""$EDGE_PARENT_DIR"\"," $BOOTSTRAP_FILE_TMP
-    printf "$PASSED updated bootstrap.json with install_dir.\n"
-else
-    printf "$PASSED bootstrap.json contains install_dir.\n"
-fi
-
-echo "PRINTING bootstrap.json after changes"
-cat $BOOTSTRAP_FILE_TMP
-
-# call edgectl with update version (for now: just use latest)
-
-echo "$INFO preparing edgectl install command."
-
-EDGECTL_FLAGS=""
-
-echo "$INFO Detected environment is $ENV_DETECTED."
-if [[ $ENV_DETECTED == "staging" ]]
-then
-    EDGECTL_FLAGS="${EDGECTL_FLAGS} -s"
-    echo "$INFO Using staging environment."
-else
-    echo "$INFO Using production environment."
-fi
-
-EGECTL_LOG="$WRITEABLE_TMP_LOCATION/edgectl_install.log"
-echo "$INFO command to run is:"
-echo "$INFO $EDGECTL_COMMAND install $EDGECTL_FLAGS -b $BOOTSTRAP_FILE_TMP &> $EGECTL_LOG"
-echo "$RUN executing edgectl install... will go dark now."
+echo "$RUN executing install script... will go dark now."
 
 # need to run this in the background, because edgectl will kill edge and therefore this script, too
-nohup $EDGECTL_COMMAND install $EDGECTL_FLAGS -b $BOOTSTRAP_FILE_TMP &> "$EGECTL_LOG" &
+nohup $EDGE_INSTALL_SCRIPT &> "$EDGECTL_LOG" &
+

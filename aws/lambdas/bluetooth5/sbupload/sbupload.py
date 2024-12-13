@@ -12,7 +12,7 @@
 #
 # 1. Compile all smartBASIC source (.sb) scripts into binary (.uwc) using the
 #    XCompiler that matches the smartBASIC firmware loaded into the IG60.  (Contact
-#    Laird Connectivity support for details.)
+#    support for details.)
 #
 # 2. Create a Python 3.7 Lambda function (as described in the Greengrass documentation)
 #    containing this file, the "greengrasssdk" folder (v1.4 or later), and all the
