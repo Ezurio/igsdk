@@ -15,7 +15,7 @@ The following are some key concepts and definitions of terms used throughout thi
 
 **JSON**: JSON is an data object serialization method that encodes objects into strings and conversely decodes strings into object data.  In this demonstration, all the data and control messages passed over the VSP connection are encoded as JSON.
 
-**smartBASIC**: Sentrius IG60 with Bluetooth 5, and the BL654 USB dongle both support the smartBASIC programming language.  Refer to the [BL654 product page](https://www.lairdconnect.com/wireless-modules/bluetooth-modules/bluetooth-5-modules/bl654-series-bluetooth-module-nfc) for more details and support information regarding smartBASIC.
+**smartBASIC**: Sentrius IG60 with Bluetooth 5, and the BL654 USB dongle both support the smartBASIC programming language.  Refer to the [BL654 product page](https://www.ezurio.com/wireless-modules/bluetooth-modules/bluetooth-5-modules/bl654-series-bluetooth-module-nfc) for more details and support information regarding smartBASIC.
 
 ### Component Overview
 
@@ -34,13 +34,11 @@ The VSP central Lambda function `vsp_central.py` performs the core functions of 
 ### Supporting Documentation
 You may wish to refer to the following additional documentation for details that are omitted here:
 
-[Sentrius IG60 Online Documentation](http://documentation.lairdconnect.com/Builds/IG60-GREENGRASS/latest/Content/Home.htm)
-
 [AWS IoT Greengrass Developer Guide](https://docs.aws.amazon.com/greengrass/latest/developerguide/what-is-gg.html)
 
-[BL654 Documentation](https://www.lairdconnect.com/wireless-modules/bluetooth-modules/bluetooth-5-modules/bl654-series-bluetooth-module-nfc#documentation)
+[BL654 Documentation](https://www.ezurio.com/wireless-modules/bluetooth-modules/bluetooth-5-modules/bl654-series-bluetooth-module-nfc#documentation)
 
-[UwTerminalX Setup and Installation Guide](https://github.com/LairdCP/UwTerminalX) on Github
+[UwTerminalX Setup and Installation Guide](https://github.com/Ezurio/UwTerminalX) on Github
 
 ## Running the VSP Sensor Demo
 
@@ -51,14 +49,15 @@ In order to run this demo, you must have the following:
 * A BL654 USB dongle (*NOTE:* This dongle is **NOT** included with the Sentrius IG60 and must be obtained separately)
 * A mobile phone running iOS 8.0 or later, or Android 7.0 or later, and the free Sentrius IG Connect application available in the Apple App Store or Google Play
 * A development PC running Windows, with the following installed:
-  * [UwTerminalX](https://github.com/LairdCP/UwTerminalX)
+  * [UwTerminalX](https://github.com/Ezurio/UwTerminalX)
   * Python 3.7 or later
   * pySerial 3.3 or later
   * The smartBASIC XCompiler for the Sentrius IG60 Bluetooth 5 co-processor (contact support for more details), e.g., `XComp_BL654_A231_7D41.exe`
 * An AWS account with permissions to create and manage Lambdas functions and Greengrass groups
 
 ### Install and Provision the Sentrius IG60 with Bluetooth 5
-Refer to the Sentrius IG60 online documentation for details on how to [connect the IG60 to your AWS account](http://documentation.lairdconnect.com/Builds/IG60-GREENGRASS/latest/Content/Topics/5%20-%20Using%20the%20Device/Greengrass%20Getting%20Started/Introduction.htm).  Once you have completed this step, verify that your Sentrius IG60 is online (via the status LEDs) and available via the AWS IoT Greengrass console.
+Contact your support contact for details on connecting your IG60 to your AWS account.
+Once you have completed this step, verify that your Sentrius IG60 is online (via the status LEDs) and available via the AWS IoT Greengrass console.
 
 ### Build and deploy the VSP peripheral application (simulated sensor)
 
@@ -93,7 +92,7 @@ Refer to the Sentrius IG60 online documentation for details on how to [connect t
 * Create a ZIP file containing the following:
   * `vspcentral.py` from this directory
   * The compiled "central.uwc" smartBASIC application (generated in the previous step)
-  * The Sentrius IG60 ["igsdk"](https://github.com/LairdCP/igsdk/tree/master/python/igsdk) directory
+  * The Sentrius IG60 ["igsdk"](https://github.com/Ezurio/igsdk/tree/master/python/igsdk) directory
   * The Greengrass Core SDK directory ["greengrasssdk"](https://github.com/aws/aws-greengrass-core-sdk-python) directory
 * Log into your AWS account dashboard
 * Enter the AWS Lambda console and create a new Lambda function (e.g., "vsp_central") with Python 3.7 as the runtime
